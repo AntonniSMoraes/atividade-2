@@ -1,21 +1,36 @@
-// CÓDIGO ORIGINAL - refatorar aplicando Clean Code
-function f(l) {
-let r = [];
-for (let i = 0; i < l.length; i++) {
-if (l[i].p > 50 && l[i].p < 200) {
-if (l[i].s > 0) {
-let x = l[i].p * 0.9;
-r.push({ n: l[i].n, op: l[i].p, np: x, d: l[i].p - x });
+// Refatorado com Clean Code
+const DISCOUNT_RATE = 0.9;
+const MIN_PRICE = 50;
+const MAX_PRICE = 200;
+
+function applyDiscountToEligibleProducts(products) {
+    return products
+        .filter(product => isEligibleForDiscount(product))
+        .map(product => createDiscountedProduct(product));
 }
+    
+function isEligibleForDiscount(product) {
+    return product.price > MIN_PRICE && product.price < MAX_PRICE && product.stock > 0;
 }
+
+function createDiscountedProduct(product) {
+    const newPrice = product.price * DISCOUNT_RATE;
+    const discount = product.price - newPrice;
+    
+    return {
+        name: product.name,
+        originalPrice: product.price,
+        newPrice: newPrice,
+        discount: discount
+    };
 }
-return r;
-}
-let data = [
-{ n: "Camiseta", p: 79.9, s: 10 },
-{ n: "Meias", p: 19.9, s: 50 },
-{ n: "Jaqueta", p: 299.9, s: 0 },
-{ n: "Calça", p: 149.9, s: 5 },
-{ n: "Boné", p: 59.9, s: 20 }
+
+const productData = [
+    { name: "Camiseta", price: 79.9, stock: 10 },
+    { name: "Meias", price: 19.9, stock: 50 },
+    { name: "Jaqueta", price: 299.9, stock: 0 },
+    { name: "Calça", price: 149.9, stock: 5 },
+    { name: "Boné", price: 59.9, stock: 20 }
 ];
-console.log(f(data));
+
+console.log(applyDiscountToEligibleProducts(productData));
